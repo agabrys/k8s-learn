@@ -1,0 +1,24 @@
+plugins {
+  id 'java'
+  id 'com.github.ben-manes.versions' version '0.39.0'
+  id 'org.springframework.boot' version '2.5.5'
+  id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+}
+
+group = 'com.github.agabrys'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  implementation 'org.springframework.boot:spring-boot-starter-web'
+
+  testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+test {
+  useJUnitPlatform()
+}
