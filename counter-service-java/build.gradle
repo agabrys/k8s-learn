@@ -24,7 +24,7 @@ docker {
   springBootApplication {
     baseImage = 'sapmachine:17'
     maintainer = 'Adam Gabrys'
-    images = ["${group}/${name}:${version}", "${group}/${name}:dev"]
+    images = ["${group}/${name}:${version}", "${group}/${name}:latest"]
   }
 }
 

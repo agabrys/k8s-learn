@@ -29,7 +29,7 @@ To build a Docker image execute
 and next run a new Docker container
 
 ```shell
-docker run -p 8080:8080 com.github.agabrys/counter-service:dev
+docker run -p 8080:8080 com.github.agabrys/counter-service:latest
 ```
 
 The application is available at `http://localhost:8080` (example `http://localhost:8080/counter/value`).

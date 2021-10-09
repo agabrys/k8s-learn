@@ -1,0 +1,59 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: deployment-metadata-reader
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: deployment-metadata-reader-role
+rules:
+  - apiGroups:
+    - ""
+    - apps
+    resources:
+    - deployments
+    verbs:
+    - list
+    - watch
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: deployment-metadata-reader:deployment-metadata-reader-role
+roleRef:
+  kind: ClusterRole
+  name: deployment-metadata-reader-role
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+  - kind: ServiceAccount
+    name: deployment-metadata-reader
+    namespace: default
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: k8s-controller-nginx-label-reconciler
+spec:
+  selector:
+    matchLabels:
+      app: k8s-controller-nginx-label-reconciler
+  template:
+    metadata:
+      labels:
+        app: k8s-controller-nginx-label-reconciler
+    spec:
+      serviceAccountName: deployment-metadata-reader
+      containers:
+      - name: k8s-controller-nginx-label-reconciler
+        image: k3d-registry.localhost:5000/com.github.agabrys/kubernetes-controller:latest
+        env:
+        - name: LABEL_NAME
+          value: app
+        - name: LABEL_VALUE
+          value: nginx
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
