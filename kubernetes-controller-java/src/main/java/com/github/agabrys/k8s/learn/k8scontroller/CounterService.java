@@ -30,10 +30,21 @@ public class CounterService {
     try {
       response = HttpClient.newHttpClient().send(request, BodyHandlers.discarding());
     } catch (IOException | InterruptedException e) {
-      throw new RuntimeException(e);
+      throw new CounterServiceException(e);
     }
     if (response.statusCode() != HttpURLConnection.HTTP_OK) {
-      throw new RuntimeException("Invalid status code: " + response.statusCode());
+      throw new CounterServiceException("The request couldn't be processed, error code: " + response.statusCode());
+    }
+  }
+
+  public static class CounterServiceException extends RuntimeException {
+
+    public CounterServiceException(String message) {
+      super(message);
+    }
+
+    public CounterServiceException(Throwable cause) {
+      super(cause);
     }
   }
 }

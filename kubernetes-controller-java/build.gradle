@@ -21,6 +21,7 @@ dependencies {
   testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
   testImplementation 'org.assertj:assertj-core:3.21.0'
   testImplementation 'org.mockito:mockito-core:4.0.0'
+  testImplementation 'com.squareup.okhttp3:mockwebserver:4.9.2'
 }
 
 docker {
