@@ -49,6 +49,8 @@ Demo presents how to deploy a Spring Boot application in the local Kubernetes cl
    ```
    The Counter service is configured to returns a number of deployments with the `app=nginx` label
 
+The cluster needs a few seconds (30-60) to provision all pods, so please wait a moment before you start going through the demo steps.
+
 ## Demo
 
 Use the following steps to verify that the integration between the Kubernetes controller and the Counter service works properly.
