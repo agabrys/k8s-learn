@@ -1,0 +1,50 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: nginx2
+  labels:
+    app: nginx
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      app: ignored
+  template:
+    metadata:
+      labels:
+        app: ignored
+    spec:
+      containers:
+      - name: ignored
+        image: nginx
+        imagePullPolicy: IfNotPresent
+        resources:
+          limits:
+            memory: "50Mi"
+            cpu: "100m"
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: nginx3
+  labels:
+    app: nginx
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      app: ignored
+  template:
+    metadata:
+      labels:
+        app: ignored
+    spec:
+      containers:
+      - name: ignored
+        image: nginx
+        imagePullPolicy: IfNotPresent
+        resources:
+          limits:
+            memory: "50Mi"
+            cpu: "100m"

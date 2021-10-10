@@ -9,7 +9,7 @@ Demo presents how to deploy a Spring Boot application in the local Kubernetes cl
 * [Kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl)
 * [k3d](https://k3d.io/)
 
-## Launch
+## Prepare Cluster
 
 1. Launch Docker deamon
 2. Create a local registry
@@ -47,7 +47,35 @@ Demo presents how to deploy a Spring Boot application in the local Kubernetes cl
    ```shell
    kubectl apply -f ./kubernetes-controller.yaml
    ```
-7. The Counter service endpoints:
-   - `http://localhost:9080/counter/value`
-   - `http://localhost:9080/counter/increment`
-   - `http://localhost:9080/counter/decrement`
+   The Counter service is configured to returns a number of deployments with the `app=nginx` label
+
+## Demo
+
+Use the following steps to verify that the integration between the Kubernetes controller and the Counter service works properly.
+
+1. Open the Counter service endpoints: `http://localhost:9080/counter/value`. It should return `0`
+2. Add the `nginx1` deployment (with `app=nginx`)
+   ```shell
+   kubectl apply -f ./test-1.yaml
+   ```
+   The Counter service should return `1`
+3. Add the `none-nginx` deployment (without `app=nginx`)
+   ```shell
+   kubectl apply -f ./test-2.yaml
+   ```
+   The Counter service should return `1`
+4. Add the `nginx2` and `nginx3` deployments (with `app=nginx`)
+   ```shell
+   kubectl apply -f ./test-3.yaml
+   ```
+   The Counter service should return `3`
+5. Remove the `nginx2` deployement
+   ```shell
+   kubectl delete deployment nginx2
+   ```
+   The Counter service should return `2`
+6. Remove the `none-nginx` deployment
+   ```shell
+   kubectl delete deployment none-nginx
+   ```
+   The Counter service should return `2`

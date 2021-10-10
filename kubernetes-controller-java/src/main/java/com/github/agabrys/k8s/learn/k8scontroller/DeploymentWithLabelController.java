@@ -17,7 +17,6 @@ import io.kubernetes.client.util.Config;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 // TODO: add tests
 public class DeploymentWithLabelController {
@@ -48,6 +47,7 @@ public class DeploymentWithLabelController {
     informerFactory.startAllRegisteredInformers();
 
     var labelChecker = new LabelChecker(System.getenv("LABEL_NAME"), System.getenv("LABEL_VALUE"));
+    var counterService = new CounterService(System.getenv("COUNTER_SERVICE_URL"));
     var controller = ControllerBuilder.defaultBuilder(informerFactory)
       .watch(workQueue ->
         ControllerBuilder.controllerWatchBuilder(V1Deployment.class, workQueue)
@@ -58,7 +58,7 @@ public class DeploymentWithLabelController {
           .withOnDeleteFilter((deployment, stateUnknown) -> labelChecker.hasLabel(deployment))
           .build()
       )
-      .withReconciler(new DeploymentWithLabelReconciler(indexInformer, labelChecker))
+      .withReconciler(new DeploymentWithLabelReconciler(indexInformer, labelChecker, counterService))
       .withReadyFunc(indexInformer::hasSynced)
       .build();
 
@@ -72,27 +72,25 @@ public class DeploymentWithLabelController {
 
     private final Lister<V1Deployment> lister;
     private final LabelChecker labelChecker;
-    private final AtomicInteger counter = new AtomicInteger();
+    private final CounterService counterService;
 
-    public DeploymentWithLabelReconciler(SharedIndexInformer<V1Deployment> indexInformer, LabelChecker labelChecker) {
+    public DeploymentWithLabelReconciler(
+      SharedIndexInformer<V1Deployment> indexInformer, LabelChecker labelChecker, CounterService counterService
+    ) {
       lister = new Lister<>(indexInformer.getIndexer());
       this.labelChecker = labelChecker;
+      this.counterService = counterService;
     }
 
-    // TODO: send request to the counter service
     @Override
     public Result reconcile(Request request) {
       var deployment = lister.namespace(request.getNamespace()).get(request.getName());
       if (labelChecker.hasLabel(deployment)) {
-        print(counter.incrementAndGet());
+        counterService.increment();
       } else {
-        print(counter.updateAndGet(i -> i > 0 ? i - 1 : 0));
+        counterService.decrement();
       }
       return new Result(false);
-    }
-
-    private static void print(int counter) {
-      System.out.println("Counter: " + counter);
     }
   }
 

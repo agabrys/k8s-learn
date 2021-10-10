@@ -53,6 +53,8 @@ spec:
           value: app
         - name: LABEL_VALUE
           value: nginx
+        - name: COUNTER_SERVICE_URL
+          value: http://counter-service.default.svc.cluster.local/counter
         resources:
           limits:
             memory: "128Mi"

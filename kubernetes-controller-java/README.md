@@ -1,6 +1,6 @@
 # Kubernetes Contoller
 
-The controller reconciles on the Deployments created with the `${env:LABEL_NAME}=${env:LABEL_VALUE}` label in any namespace and sends a request to the [Counter service](../counter-service-java/) to count those deployments.
+The controller reconciles on the Deployments created with the `${env:LABEL_NAME}=${env:LABEL_VALUE}` label in any namespace and sends a request to the [Counter service](../counter-service-java/) (pointed by `${env:COUNTER_SERVICE_URL}`) to count those deployments.
 
 ## How to Build
 
