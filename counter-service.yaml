@@ -43,8 +43,8 @@ spec:
   rules:
   - http:
       paths:
-      - path: /counter
-        pathType: Prefix
+      - path: /counter/value
+        pathType: Exact
         backend:
           service:
             name: counter-service
