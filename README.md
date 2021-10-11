@@ -81,3 +81,15 @@ Use the following steps to verify that the integration between the Kubernetes co
    kubectl delete deployment none-nginx
    ```
    The Counter service should return `2`
+
+## Notes
+
+The project has been created in two days and almost all used technologies were new to me. I see a lot of fields to improve, but I didn't have enough time to work on it. Some examples:
+- create a K8s namespace and use it instead of `default`
+- use `fieldSelector` to gather less data when `deployments` are requested
+- add tests to the K8s controller written by using [kubernetes-client/java](https://github.com/kubernetes-client/java)
+- use more precise resource limits 
+
+The git commits are not descriptive. The main goal was to learn K8s, so I didn't focus on them too much (especially that nobody will read them 😉). Some examples of git messages which I usually write:
+- https://github.com/jenkinsci/branch-api-plugin/pull/244/commits/0ba29aae1fbe421f9fc0b46bf50d14889da1233f
+- https://github.com/jenkinsci/active-choices-plugin/pull/32/commits/04cf5ec8d39d63c907879cb91bcd498fe5d837a7
